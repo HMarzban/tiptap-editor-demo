@@ -4,7 +4,9 @@ import path from "path";
 import { defineConfig } from "vitest/config";
 
 // https://vite.dev/config/
-export default defineConfig({
+// Production builds use repo base path for GitHub Pages project sites.
+export default defineConfig(({ command }) => ({
+  base: command === "build" ? "/tiptap-editor-demo/" : "/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -20,4 +22,4 @@ export default defineConfig({
     include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
     passWithNoTests: false,
   },
-});
+}));

@@ -2,6 +2,8 @@
 
 Demo shell for a **React + TipTap v3** rich-text editor: toolbar (headings, lists, links, images, tasks), **hyperlink popovers** via `@docs.plus/extension-hyperlink`, indent support, and **light/dark** theming (`next-themes`). The sample document exercises formatting so you can evaluate behavior quickly.
 
+**Live demo:** [hmarzban.github.io/tiptap-editor-demo](https://hmarzban.github.io/tiptap-editor-demo/)
+
 
 
 *Screenshots are full-page captures from `bun run build` + `bun run preview`. Update `docs/app-screenshot-light.png` and `docs/app-screenshot-dark.png` after major UI changes if you want the readme to stay in sync.*
@@ -30,6 +32,8 @@ Open the URL Vite prints (default `http://localhost:5173`). Production bundle:
 bun run build
 bun run preview
 ```
+
+After a production build, open **`http://localhost:4173/tiptap-editor-demo/`** (the app uses the GitHub Pages base path in `vite build`).
 
 ## Scripts
 
