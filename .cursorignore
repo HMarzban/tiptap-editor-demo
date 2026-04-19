@@ -1,0 +1,10 @@
+# Dependencies & build output (indexing noise, large trees)
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vite/
+
+# Logs & caches
+*.log
+.cache/

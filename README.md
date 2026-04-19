@@ -1,4 +1,4 @@
-# TipTap editor
+# TipTap editor demo
 
 Demo shell for a **React + TipTap v3** rich-text editor: toolbar (headings, lists, links, images, tasks), **hyperlink popovers** via `@docs.plus/extension-hyperlink`, indent support, and **light/dark** theming (`next-themes`). The sample document exercises formatting so you can evaluate behavior quickly.
 
@@ -60,3 +60,13 @@ On push and pull requests to `main` / `master`, GitHub Actions runs `bun install
 - **Errors:** `AppProviders` wraps the tree with an error boundary and theme provider.
 
 Optional client configuration: copy `.env.example` to `.env.local` and use **`VITE_*`** names only (values are exposed to the browser).
+
+## License
+
+[MIT](LICENSE). Copyright (c) 2026 Hossein Marzban.
+
+## Publishing this repo on GitHub
+
+1. Create a repository named **`tiptap-editor-demo`** (or rename locally with `git remote set-url`).
+2. Optionally add to `package.json`: `"repository"` / `"bugs"` / `"homepage"` pointing at your GitHub URL so npm metadata and the npmjs.com sidebar stay accurate if you ever publish the package.
+3. Tag releases with **SemVer**, e.g. `v1.0.0` (see git tags on this repo after the release commit).
