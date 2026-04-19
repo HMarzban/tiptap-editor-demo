@@ -6,13 +6,13 @@ import { useNetworkStatus } from "./hooks/useNetworkStatus";
 import { useEditorInstance } from "./hooks/useEditorInstance";
 import { EditorProps } from "./hooks/types";
 import {
-  DEFAULT_INITIAL_HTML,
-  DEFAULT_PLACEHOLDER_TEXT,
-} from "./constants";
+  EMPTY_DOCUMENT_HTML,
+  DEFAULT_EDITOR_PLACEHOLDER,
+} from "@/config/editorDefaults";
 
 export function Editor({
-  initialContent = DEFAULT_INITIAL_HTML,
-  placeholder = DEFAULT_PLACEHOLDER_TEXT,
+  initialContent = EMPTY_DOCUMENT_HTML,
+  placeholder = DEFAULT_EDITOR_PLACEHOLDER,
 }: EditorProps) {
   const isOnline = useNetworkStatus();
   const { editor, spellCheck, setSpellCheck } = useEditorInstance({

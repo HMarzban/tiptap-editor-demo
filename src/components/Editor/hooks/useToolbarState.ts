@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Editor } from "@tiptap/react";
+import { HEADING_LEVEL_FONT_PX, PARAGRAPH_FONT_PX } from "../headingTypography";
 
 export const TEXT_COLORS = [
   { name: "Default", color: "inherit" },
@@ -45,7 +46,6 @@ export function useToolbarState(editor: Editor | null) {
     const numericSize = parseInt(size, 10);
     const sizes = FONT_SIZES.map((s) => parseInt(s.value, 10));
 
-    // Find the closest value
     const nearest = sizes.reduce((prev, curr) =>
       Math.abs(curr - numericSize) < Math.abs(prev - numericSize) ? curr : prev
     );
@@ -64,16 +64,15 @@ export function useToolbarState(editor: Editor | null) {
       const normalizedSize = getNearestValidFontSize(fontSize);
       setCurrentFontSize(normalizedSize);
 
-      // Update text style and font size
       if (editor.isActive("heading", { level: 1 })) {
         setCurrentTextStyle("h1");
-        setCurrentFontSize("36px");
+        setCurrentFontSize(HEADING_LEVEL_FONT_PX[1]);
       } else if (editor.isActive("heading", { level: 2 })) {
         setCurrentTextStyle("h2");
-        setCurrentFontSize("28px");
+        setCurrentFontSize(HEADING_LEVEL_FONT_PX[2]);
       } else if (editor.isActive("heading", { level: 3 })) {
         setCurrentTextStyle("h3");
-        setCurrentFontSize("24px");
+        setCurrentFontSize(HEADING_LEVEL_FONT_PX[3]);
       } else {
         setCurrentTextStyle("paragraph");
       }
@@ -87,7 +86,6 @@ export function useToolbarState(editor: Editor | null) {
     };
   }, [editor]);
 
-  // Helpers
   const setFontSize = (size: string) => {
     if (!editor) return;
     editor.chain().focus().setFontSize(size).run();
@@ -124,7 +122,7 @@ export function useToolbarState(editor: Editor | null) {
           .chain()
           .focus()
           .toggleHeading({ level: 1 })
-          .setFontSize("36px")
+          .setFontSize(HEADING_LEVEL_FONT_PX[1])
           .run();
         break;
       case "h2":
@@ -132,7 +130,7 @@ export function useToolbarState(editor: Editor | null) {
           .chain()
           .focus()
           .toggleHeading({ level: 2 })
-          .setFontSize("30px")
+          .setFontSize(HEADING_LEVEL_FONT_PX[2])
           .run();
         break;
       case "h3":
@@ -140,12 +138,12 @@ export function useToolbarState(editor: Editor | null) {
           .chain()
           .focus()
           .toggleHeading({ level: 3 })
-          .setFontSize("24px")
+          .setFontSize(HEADING_LEVEL_FONT_PX[3])
           .run();
         break;
       case "paragraph":
       default:
-        editor.chain().focus().setParagraph().setFontSize("16px").run();
+        editor.chain().focus().setParagraph().setFontSize(PARAGRAPH_FONT_PX).run();
         break;
     }
 

@@ -1,4 +1,5 @@
-export const defaultEditorContent = `
+/** Demo document shown on first load (local sample only, not fetched). */
+export const SAMPLE_DOCUMENT_HTML = `
 <div style="text-align: center; margin-bottom: 2em;">
   <h1>🌌 Understanding Black Holes</h1>
   <p style="color: #666;">A Comprehensive Guide to Cosmic Phenomena</p>
@@ -147,18 +148,4 @@ const sagittariusA: BlackHoleProperties = {
   <p>Last updated: March 15, 2024 | Peer reviewed by the International Astrophysics Committee</p>
   <p>For academic inquiries: <a href="mailto:physics@institute.edu">physics@institute.edu</a></p>
 </div>
-`;
-
-export const simpleDefaultContent = `
-<h1>🌌 New Physics Document</h1>
-<div style="background: #f8f9fa; padding: 1em; border-left: 4px solid #0065FF; margin: 1em 0;">
-  <p>Start with our physics document template:</p>
-  <ul>
-    <li>⚛️ Define key concepts clearly</li>
-    <li>📊 Include relevant equations and data</li>
-    <li>🔬 Add experimental evidence</li>
-    <li>📚 Cite reliable sources</li>
-  </ul>
-</div>
-<p>Need help? Check our <a href="#">📚 physics documentation guidelines</a>.</p>
 `;

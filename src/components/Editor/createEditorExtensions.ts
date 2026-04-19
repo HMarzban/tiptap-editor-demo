@@ -21,7 +21,9 @@ export type CreateEditorExtensionsOptions = {
 };
 
 /**
- * Single place to register TipTap extensions (composition root for the editor).
+ * TipTap extension composition root. Pairs with:
+ * - DOM class: `editorSurface.ts` + `.tiptap` in `index.css`
+ * - Footer metrics: `CharacterCount` storage (see `editorMetrics.ts`)
  */
 export function createEditorExtensions({
   placeholder,

@@ -15,6 +15,7 @@ import {
   Minus,
 } from "lucide-react";
 import { ToolbarItem } from "./types";
+import { promptForImageUrl } from "@/lib/promptForImageUrl";
 
 export function useToolbarItems(editor: Editor | null): ToolbarItem[] {
   if (!editor) return [];
@@ -127,7 +128,7 @@ export function useToolbarItems(editor: Editor | null): ToolbarItem[] {
       icon: Image,
       title: "Image",
       action: () => {
-        const url = window.prompt("Enter image URL:");
+        const url = promptForImageUrl();
         if (url) {
           editor.chain().focus().setImage({ src: url }).run();
         }

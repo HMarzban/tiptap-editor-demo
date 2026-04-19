@@ -158,6 +158,7 @@
   }
 }
 
+/* ProseMirror root: class must stay aligned with `EDITOR_ROOT_CLASS_NAME` in `editorSurface.ts`. */
 .tiptap {
   @apply outline-none min-h-[200px] p-4 dark:text-neutral-300;
 }

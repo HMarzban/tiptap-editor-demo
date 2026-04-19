@@ -2,10 +2,10 @@ import { useEditor } from "@tiptap/react";
 import { useState, useEffect } from "react";
 import { createEditorExtensions } from "../createEditorExtensions";
 import {
-  DEFAULT_INITIAL_HTML,
-  DEFAULT_PLACEHOLDER_TEXT,
-  EDITOR_ROOT_CLASS_NAME,
-} from "../constants";
+  EMPTY_DOCUMENT_HTML,
+  DEFAULT_EDITOR_PLACEHOLDER,
+} from "@/config/editorDefaults";
+import { buildEditorRootAttributes } from "../editorSurface";
 
 export interface UseEditorInstanceParams {
   initialContent?: string;
@@ -13,8 +13,8 @@ export interface UseEditorInstanceParams {
 }
 
 export function useEditorInstance({
-  initialContent = DEFAULT_INITIAL_HTML,
-  placeholder = DEFAULT_PLACEHOLDER_TEXT,
+  initialContent = EMPTY_DOCUMENT_HTML,
+  placeholder = DEFAULT_EDITOR_PLACEHOLDER,
 }: UseEditorInstanceParams) {
   const [spellCheck, setSpellCheck] = useState(true);
 
@@ -22,10 +22,7 @@ export function useEditorInstance({
     extensions: createEditorExtensions({ placeholder }),
     content: initialContent,
     editorProps: {
-      attributes: {
-        class: EDITOR_ROOT_CLASS_NAME,
-        spellcheck: String(spellCheck),
-      },
+      attributes: buildEditorRootAttributes(spellCheck),
     },
   });
 
@@ -33,10 +30,7 @@ export function useEditorInstance({
     if (!editor) return;
     editor.setOptions({
       editorProps: {
-        attributes: {
-          class: EDITOR_ROOT_CLASS_NAME,
-          spellcheck: String(spellCheck),
-        },
+        attributes: buildEditorRootAttributes(spellCheck),
       },
     });
   }, [spellCheck, editor]);

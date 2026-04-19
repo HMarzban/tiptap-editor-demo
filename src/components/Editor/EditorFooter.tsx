@@ -2,7 +2,8 @@ import { Clock, CircleDot, SpellCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { EditorFooterProps } from "./hooks/types";
-import { READING_SPEED_WORDS_PER_MINUTE } from "./constants";
+import { READING_SPEED_WORDS_PER_MINUTE } from "@/config/editorDefaults";
+import { getEditorDocumentStats } from "./editorMetrics";
 
 export function EditorFooter({
   editor,
@@ -12,14 +13,11 @@ export function EditorFooter({
 }: EditorFooterProps) {
   if (!editor) return null;
 
-  const wordCount = editor.storage.characterCount?.words() ?? 0;
-  const charCount = editor.storage.characterCount?.characters() ?? 0;
+  const { wordCount, charCount, lineCount } = getEditorDocumentStats(editor);
   const readingTimeMinutes = Math.max(
     1,
     Math.ceil(wordCount / READING_SPEED_WORDS_PER_MINUTE)
   );
-  const text = editor.getText();
-  const lineCount = text ? text.split("\n").length : 1;
 
   return (
     <footer
