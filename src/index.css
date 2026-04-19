@@ -141,10 +141,20 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
   button {
     @apply cursor-pointer;
+  }
+}
+
+/* Semantic type scale — use these instead of ad hoc text-* on chrome / marketing surfaces */
+@layer components {
+  .text-page-title {
+    @apply text-3xl font-semibold tracking-tight text-foreground;
+  }
+  .text-ui-muted {
+    @apply text-sm text-muted-foreground;
   }
 }
 

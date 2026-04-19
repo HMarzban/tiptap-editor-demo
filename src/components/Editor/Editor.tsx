@@ -1,37 +1,42 @@
 import { EditorContent } from "@tiptap/react";
 import { Card } from "@/components/ui/card";
-import EditorCardToolbar from "./Toolbar";
-import EditorCardFooter from "./Footer";
+import { EditorToolbar } from "./EditorToolbar";
+import { EditorFooter } from "./EditorFooter";
 import { useNetworkStatus } from "./hooks/useNetworkStatus";
 import { useEditorInstance } from "./hooks/useEditorInstance";
-import { TextEditorProps } from "./hooks/types";
+import { EditorProps } from "./hooks/types";
+import {
+  DEFAULT_INITIAL_HTML,
+  DEFAULT_PLACEHOLDER_TEXT,
+} from "./constants";
 
-const EditorCard = ({
-  initialContent = "<p>Start writing...</p>",
-  placeholder = "Start typing here...",
-}: TextEditorProps) => {
+export function Editor({
+  initialContent = DEFAULT_INITIAL_HTML,
+  placeholder = DEFAULT_PLACEHOLDER_TEXT,
+}: EditorProps) {
   const isOnline = useNetworkStatus();
   const { editor, spellCheck, setSpellCheck } = useEditorInstance({
     initialContent,
     placeholder,
   });
 
-  // Render a placeholder while editor is initializing
   if (!editor) {
     return (
-      <Card className="shadow-lg mx-auto overflow-hidden border ">
-        <div className="p-4 text-muted-foreground">Loading editor...</div>
+      <Card className="shadow-lg mx-auto overflow-hidden border">
+        <div className="p-4 text-ui-muted" role="status" aria-live="polite">
+          Loading editor…
+        </div>
       </Card>
     );
   }
 
   return (
-    <Card className="shadow-lg p-0 gap-0  mx-auto overflow-hidden border ">
-      <EditorCardToolbar editor={editor} />
-      <div className="p-0 max-h-96 overflow-y-auto ">
-        <EditorContent editor={editor} className="h-full" />
+    <Card className="shadow-lg p-0 gap-0 mx-auto overflow-hidden border">
+      <EditorToolbar editor={editor} />
+      <div className="p-0 max-h-96 overflow-y-auto">
+        <EditorContent editor={editor} className="h-full min-h-0" />
       </div>
-      <EditorCardFooter
+      <EditorFooter
         editor={editor}
         isOnline={isOnline}
         spellCheck={spellCheck}
@@ -39,6 +44,6 @@ const EditorCard = ({
       />
     </Card>
   );
-};
+}
 
-export default EditorCard;
+export default Editor;

@@ -1,16 +1,17 @@
 import { Editor } from "@tiptap/react";
 import { LucideIcon } from "lucide-react";
 
-export interface TextEditorProps {
+/** Props for the rich-text editor surface (`Editor.tsx`). */
+export interface EditorProps {
   initialContent?: string;
   placeholder?: string;
 }
 
-export interface ToolbarProps {
+export interface EditorToolbarProps {
   editor: Editor | null;
 }
 
-export interface FooterProps {
+export interface EditorFooterProps {
   editor: Editor | null;
   isOnline: boolean;
   spellCheck: boolean;

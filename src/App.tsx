@@ -1,19 +1,17 @@
 import Editor from "./components/Editor/Editor";
 import { defaultEditorContent } from "./utils/defaultEditorContent";
-import IntroHeader from "./components/IntroHeader";
+import { AppHeader } from "./components/AppHeader";
 
-const App = () => {
+export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-100 dark:bg-neutral-950">
-      <div className="w-full max-w-4xl">
-        <IntroHeader />
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="w-full max-w-4xl px-4 py-8">
+        <AppHeader />
         <Editor
           initialContent={defaultEditorContent}
-          placeholder="Start writing your amazing content..."
+          placeholder="Start writing your content…"
         />
       </div>
     </div>
   );
-};
-
-export default App;
+}

@@ -25,9 +25,9 @@ import {
   FONT_SIZES,
 } from "./hooks/useToolbarState";
 import { useToolbarItems } from "./hooks/useToolbarItems";
-import { ToolbarProps, ToolbarItem } from "./hooks/types";
+import { EditorToolbarProps, ToolbarItem } from "./hooks/types";
 
-export default function Toolbar({ editor }: ToolbarProps) {
+export function EditorToolbar({ editor }: EditorToolbarProps) {
   const {
     activeColor,
     currentFontSize,
@@ -44,14 +44,12 @@ export default function Toolbar({ editor }: ToolbarProps) {
   if (!editor) return null;
 
   function renderToolbarItem(item: ToolbarItem, index: number) {
-    // Separator
     if (item.type === "separator") {
       return (
         <Separator key={index} orientation="vertical" className="!mx-1 !h-5" />
       );
     }
 
-    // Text Style
     if (item.type === "text-style") {
       return (
         <Select
@@ -81,7 +79,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
       );
     }
 
-    // Font Size
     if (item.type === "font-size") {
       return (
         <Select key={index} value={currentFontSize} onValueChange={setFontSize}>
@@ -106,7 +103,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
       );
     }
 
-    // Font Size Adjust
     if (item.type === "font-size-adjust") {
       return (
         <Tooltip key={index}>
@@ -132,7 +128,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
       );
     }
 
-    // Color Picker
     if (item.type === "color-picker") {
       return (
         <Popover key={index}>
@@ -172,6 +167,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
                 return (
                   <button
                     key={color}
+                    type="button"
                     className={`h-6 w-6 rounded-md transition-transform ${
                       active ? "ring-2 ring-offset-1" : ""
                     }`}
@@ -192,7 +188,6 @@ export default function Toolbar({ editor }: ToolbarProps) {
       );
     }
 
-    // Default: Standard button
     return (
       <Tooltip key={index}>
         <TooltipTrigger asChild>
@@ -224,7 +219,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
   }
 
   return (
-    <div className="border-b flex items-center p-3">
+    <div className="border-b flex items-center p-3" role="toolbar">
       <div className="flex items-center gap-1 flex-wrap">
         {toolbarItems.map((item, index) => renderToolbarItem(item, index))}
       </div>

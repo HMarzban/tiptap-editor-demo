@@ -1,29 +1,31 @@
-import React from "react";
 import { Clock, CircleDot, SpellCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { FooterProps } from "./hooks/types";
+import { EditorFooterProps } from "./hooks/types";
+import { READING_SPEED_WORDS_PER_MINUTE } from "./constants";
 
-const Footer: React.FC<FooterProps> = ({
+export function EditorFooter({
   editor,
   isOnline,
   spellCheck,
   setSpellCheck,
-}) => {
+}: EditorFooterProps) {
   if (!editor) return null;
 
-  const wordCount = editor.storage.characterCount?.words() || 0;
-  const charCount = editor.storage.characterCount?.characters() || 0;
-
-  // Calculate reading time (average reading speed: 200 words per minute)
-  const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
-
-  // Get line count by counting newlines in the text
+  const wordCount = editor.storage.characterCount?.words() ?? 0;
+  const charCount = editor.storage.characterCount?.characters() ?? 0;
+  const readingTimeMinutes = Math.max(
+    1,
+    Math.ceil(wordCount / READING_SPEED_WORDS_PER_MINUTE)
+  );
   const text = editor.getText();
   const lineCount = text ? text.split("\n").length : 1;
 
   return (
-    <div className="border-t px-3 py-2 flex justify-between items-center text-sm text-muted-foreground bg-muted/30">
+    <footer
+      className="border-t px-3 py-2 flex justify-between items-center text-sm text-muted-foreground bg-muted/30"
+      aria-label="Editor status"
+    >
       <div className="flex items-center gap-4">
         <div className="flex items-center">
           <CircleDot
@@ -31,17 +33,19 @@ const Footer: React.FC<FooterProps> = ({
               "w-3 h-3 mr-1",
               isOnline ? "text-green-500" : "text-neutral-400"
             )}
+            aria-hidden
           />
           <span>{isOnline ? "Online" : "Offline"}</span>
         </div>
 
         <div className="flex items-center gap-2">
           <Button
+            type="button"
             size="sm"
             variant="ghost"
             onClick={() => setSpellCheck(!spellCheck)}
             className={cn(
-              "h-7  text-xs",
+              "h-7 text-xs",
               spellCheck ? "text-primary font-medium" : "text-muted-foreground"
             )}
           >
@@ -50,26 +54,25 @@ const Footer: React.FC<FooterProps> = ({
                 "h-3 w-3 mr-1",
                 spellCheck ? "text-primary" : "text-muted-foreground"
               )}
+              aria-hidden
             />
-            Spell Check
+            Spellcheck
           </Button>
         </div>
       </div>
 
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1">
-          <Clock className="w-3 h-3" />
+          <Clock className="w-3 h-3" aria-hidden />
           <span>{readingTimeMinutes} min read</span>
         </div>
 
-        <div>
-          {wordCount} {wordCount === 1 ? "word" : "words"} | {charCount}{" "}
-          {charCount === 1 ? "char" : "chars"} | {lineCount}{" "}
+        <div className="tabular-nums">
+          {wordCount} {wordCount === 1 ? "word" : "words"} · {charCount}{" "}
+          {charCount === 1 ? "character" : "characters"} · {lineCount}{" "}
           {lineCount === 1 ? "line" : "lines"}
         </div>
       </div>
-    </div>
+    </footer>
   );
-};
-
-export default Footer;
+}
