@@ -63,10 +63,3 @@ Optional client configuration: copy `.env.example` to `.env.local` and use `**VI
 ## License
 
 [MIT](LICENSE). Copyright (c) 2026 Hossein Marzban.
-
-## Publishing this repo on GitHub
-
-1. Create a repository named `**tiptap-editor-demo**` (or rename locally with `git remote set-url`).
-2. Optionally add to `package.json`: `"repository"` / `"bugs"` / `"homepage"` pointing at your GitHub URL so npm metadata and the npmjs.com sidebar stay accurate if you ever publish the package.
-3. Tag releases with **SemVer**, e.g. `v1.0.0` (see git tags on this repo after the release commit).
-
