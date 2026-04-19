@@ -10,7 +10,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
     "lint": "eslint .",
+    "ci": "bun run lint && bun run typecheck && bun run build",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1,54 +1,34 @@
-# React + TypeScript + Vite
+# TipTap Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Rich text editor (React, Vite, TipTap v3, Bun). Includes toolbar, hyperlink popovers (`@docs.plus/extension-hyperlink`), indent, and light/dark theming via `next-themes`.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Bun](https://bun.sh) 1.x (`package.json` `engines.bun`)
 
-## Expanding the ESLint configuration
+## Commands
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Script        | Purpose                          |
+| ------------- | -------------------------------- |
+| `bun install` | Install dependencies             |
+| `bun run dev` | Local dev server                 |
+| `bun run lint` | ESLint                           |
+| `bun run typecheck` | TypeScript project references |
+| `bun run build` | `tsc -b` + production bundle     |
+| `bun run ci` | Lint + typecheck + build (local gate) |
+| `bun run preview` | Preview production build     |
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## CI
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+GitHub Actions runs `bun install --frozen-lockfile`, lint, typecheck, and build on pushes/PRs to `main` / `master`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Production notes
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Build emits **hidden source maps** for error tracking without shipping obvious `.map` URLs to browsers.
+- Editor root uses a stable **`tiptap` class** on the ProseMirror element so `index.css` prose rules apply; spellcheck updates no longer wipe that class.
+- **Error boundary** wraps the app in `main.tsx` for graceful failure.
+- Hyperlink popover tokens (`--hl-*`) are mapped to the app theme in `src/index.css`.
+
+## Environment
+
+Optional `.env.local` (see `.env.example`). Use `VITE_*` only for client-safe values.
