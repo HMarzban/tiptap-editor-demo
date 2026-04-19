@@ -1,4 +1,4 @@
-# Industry-standard PR / main gate: install → lint → typecheck → build
+# Industry-standard PR / main gate: install → lint → typecheck → test → build
 name: CI
 
 on:
@@ -29,6 +29,9 @@ jobs:
 
       - name: Typecheck
         run: bun run typecheck
+
+      - name: Test
+        run: bun run test
 
       - name: Production build
         run: bun run build
