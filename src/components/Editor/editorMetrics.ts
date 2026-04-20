@@ -17,12 +17,22 @@ type CharacterCountStorage = {
  */
 export function getEditorDocumentStats(editor: Editor): EditorDocumentStats {
   const text = editor.getText();
-  const lineCount = text ? text.split("\n").length : 1;
+  const lineCount = text.length > 0 ? text.split("\n").length : 1;
   const cc = editor.storage.characterCount as CharacterCountStorage | undefined;
 
-  const wordCount = typeof cc?.words === "function" ? cc.words() : 0;
-  const charCount =
+  let wordCount = typeof cc?.words === "function" ? cc.words() : 0;
+  let charCount =
     typeof cc?.characters === "function" ? cc.characters() : text.length;
+
+  // CharacterCount storage can report 0 while the doc has text (e.g. rare collab edge cases).
+  if (text.length > 0) {
+    if (charCount === 0) {
+      charCount = text.length;
+    }
+    if (wordCount === 0 && /\S/.test(text)) {
+      wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+    }
+  }
 
   return { wordCount, charCount, lineCount };
 }

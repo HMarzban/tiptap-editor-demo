@@ -15,10 +15,10 @@ export function EditorFooter({
   if (!editor) return null;
 
   const { wordCount, charCount, lineCount } = getEditorDocumentStats(editor);
-  const readingTimeMinutes = Math.max(
-    1,
-    Math.ceil(wordCount / READING_SPEED_WORDS_PER_MINUTE)
-  );
+  const readingTimeMinutes =
+    wordCount > 0
+      ? Math.max(1, Math.ceil(wordCount / READING_SPEED_WORDS_PER_MINUTE))
+      : 0;
 
   return (
     <footer
@@ -73,7 +73,9 @@ export function EditorFooter({
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1">
           <Clock className="w-3 h-3" aria-hidden />
-          <span>{readingTimeMinutes} min read</span>
+          <span>
+            {wordCount === 0 ? "—" : `${readingTimeMinutes} min read`}
+          </span>
         </div>
 
         <div className="tabular-nums">

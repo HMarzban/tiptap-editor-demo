@@ -35,9 +35,9 @@ describe("getEditorDocumentStats", () => {
     });
   });
 
-  it("falls back to plain text length when CharacterCount storage is missing", () => {
+  it("falls back to plain text when CharacterCount storage is missing", () => {
     const stats = getEditorDocumentStats(editorStub({ text: "abc" }));
-    expect(stats.wordCount).toBe(0);
+    expect(stats.wordCount).toBe(1);
     expect(stats.charCount).toBe(3);
     expect(stats.lineCount).toBe(1);
   });
@@ -47,6 +47,21 @@ describe("getEditorDocumentStats", () => {
       editorStub({ text: "a\nb\nc", characterCount: { words: () => 0 } })
     );
     expect(stats.lineCount).toBe(3);
+    expect(stats.wordCount).toBe(3);
+  });
+
+  it("derives counts from text when CharacterCount reports zero but text is non-empty", () => {
+    const stats = getEditorDocumentStats(
+      editorStub({
+        text: "hello",
+        characterCount: {
+          words: () => 0,
+          characters: () => 0,
+        },
+      })
+    );
+    expect(stats.wordCount).toBe(1);
+    expect(stats.charCount).toBe(5);
   });
 
   it("treats an empty document as one line", () => {

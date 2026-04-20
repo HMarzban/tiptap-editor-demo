@@ -29,6 +29,8 @@ export function useEditorInstance({
   const seedRef = useRef(false);
 
   const editor = useEditor({
+    /** TipTap v3 defaults this off; without it, React never re-renders on edits (footer metrics stay at 0). */
+    shouldRerenderOnTransaction: true,
     extensions: createEditorExtensions({ placeholder, collaboration }),
     content: collaboration ? undefined : initialContent,
     editorProps: {
