@@ -8,8 +8,14 @@
 
 const DEFAULT_ROOM = "tiptap-demo";
 
-/** y-webrtc defaults (package ships `wss://y-webrtc-eu.fly.dev`; override via `VITE_COLLAB_SIGNALING`). */
-const DEFAULT_WEBRTC_SIGNALING = ["wss://y-webrtc-eu.fly.dev"] as const;
+/**
+ * y-webrtc public signaling (client connects to all in parallel).
+ * Override with `VITE_COLLAB_SIGNALING` if these are unreachable from your network.
+ */
+const DEFAULT_WEBRTC_SIGNALING = [
+  "wss://signaling.yjs.dev",
+  "wss://y-webrtc-eu.fly.dev",
+] as const;
 
 export function isCollabEnabled(): boolean {
   return import.meta.env.VITE_COLLAB === "true";

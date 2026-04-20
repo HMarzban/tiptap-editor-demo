@@ -42,14 +42,6 @@ export function useCollaborationSession(
 
     const doc = new Y.Doc();
     let cancelled = false;
-    let readyFallbackId: ReturnType<typeof setTimeout> | undefined;
-    let webrtc: WebrtcProvider | undefined;
-
-    const onWebrtcSynced = ({ synced: ok }: { synced: boolean }) => {
-      if (ok) {
-        setSynced(true);
-      }
-    };
 
     const prov: CollabSyncProvider = useWebSocket
       ? new HocuspocusProvider({
@@ -58,10 +50,10 @@ export function useCollaborationSession(
           document: doc,
           onSynced: () => setSynced(true),
         })
-      : (webrtc = new WebrtcProvider(getCollabRoomId(), doc, {
+      : new WebrtcProvider(getCollabRoomId(), doc, {
           signaling: getWebrtcSignalingUrls(),
           peerOpts: getWebrtcPeerOpts(),
-        }));
+        });
 
     if (useWebSocket) {
       const hp = prov as HocuspocusProvider;
@@ -74,15 +66,6 @@ export function useCollaborationSession(
 
     const awareness: Awareness = prov.awareness!;
 
-    if (!useWebSocket) {
-      webrtc!.on("synced", onWebrtcSynced);
-      readyFallbackId = setTimeout(() => {
-        if (!cancelled) {
-          setSynced(true);
-        }
-      }, 4000);
-    }
-
     awareness.setLocalStateField("user", getCollabUserIdentity());
 
     const onAwareness = () => {
@@ -93,18 +76,16 @@ export function useCollaborationSession(
 
     queueMicrotask(() => {
       if (cancelled) return;
+      if (!useWebSocket) {
+        // WebRTC + Yjs are local-first: show the editor without waiting for signaling.
+        setSynced(true);
+      }
       setYdoc(doc);
       setProvider(prov);
     });
 
     return () => {
       cancelled = true;
-      if (readyFallbackId !== undefined) {
-        clearTimeout(readyFallbackId);
-      }
-      if (webrtc) {
-        webrtc.off("synced", onWebrtcSynced);
-      }
       awareness.off("update", onAwareness);
       prov.destroy();
       doc.destroy();

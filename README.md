@@ -32,7 +32,7 @@ Bun, React 19, Vite 8, Tailwind CSS 4, TipTap 3 / ProseMirror. Quality checks: E
 
 Multi-user editing (shared document, remote carets) works from a **static** build—no app server required.
 
-**Default path (good for GitHub Pages demos):** set **`VITE_COLLAB=true`** only. The app uses **WebRTC** via [y-webrtc](https://github.com/yjs/y-webrtc) with **public signaling** (override with comma-separated **`VITE_COLLAB_SIGNALING`** if needed). ICE uses public **Google STUN** hosts. This is **best-effort**: peers may fail to connect on strict networks, and **content is not durable**—treat it as a playground.
+**Default path (good for GitHub Pages demos):** set **`VITE_COLLAB=true`** only. The app uses **WebRTC** via [y-webrtc](https://github.com/yjs/y-webrtc) with **public signaling** (defaults try **`wss://signaling.yjs.dev`** and **`wss://y-webrtc-eu.fly.dev`** in parallel; override with comma-separated **`VITE_COLLAB_SIGNALING`**). ICE uses public **Google STUN** only—there is **no TURN relay**, so **two different devices** on restrictive networks may never peer. **Two tabs in the same browser** usually sync quickly via **BroadcastChannel** without waiting on WebRTC. **Content is not durable**; the default room name is shared by everyone using the demo—treat it as a playground.
 
 **Optional WebSocket path:** set **`VITE_COLLAB_WS_URL`** to a Hocuspocus-compatible **`wss://`** endpoint; then WebRTC is **not** used.
 
