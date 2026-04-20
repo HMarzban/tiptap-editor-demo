@@ -9,13 +9,18 @@
 const DEFAULT_ROOM = "tiptap-demo";
 
 /**
- * y-webrtc public signaling (client connects to all in parallel).
- * Override with `VITE_COLLAB_SIGNALING` if these are unreachable from your network.
+ * Default: **no** built-in signaling URLs. Former community relays (`signaling.yjs.dev`, fly.dev,
+ * etc.) often fail in the browser, which floods the console with WebSocket errors and does not
+ * help users. Same-browser tabs still sync via y-webrtc **BroadcastChannel** without signaling.
+ *
+ * For two separate devices, set **`VITE_COLLAB_SIGNALING`** to your own `wss://` server that
+ * runs the y-webrtc signaling protocol (`y-webrtc-signaling` / `bin/server.js`), or use
+ * **`VITE_COLLAB_WS_URL`** (Hocuspocus) instead.
+ *
+ * Note: **Google STUN** (`stun.l.google.com`) is only for ICE/NAT traversal, not signaling—there
+ * is no Google-hosted y-webrtc signaling endpoint.
  */
-const DEFAULT_WEBRTC_SIGNALING = [
-  "wss://signaling.yjs.dev",
-  "wss://y-webrtc-eu.fly.dev",
-] as const;
+const DEFAULT_WEBRTC_SIGNALING: readonly string[] = [];
 
 export function isCollabEnabled(): boolean {
   return import.meta.env.VITE_COLLAB === "true";
@@ -32,7 +37,10 @@ export function getWebrtcSignalingUrls(): string[] {
   if (!raw) {
     return [...DEFAULT_WEBRTC_SIGNALING];
   }
-  return raw.split(",").map((s) => s.trim()).filter((s) => s.length > 0);
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
 }
 
 /** Public STUN (ICE) for WebRTC — helps some NATs; not a Yjs signaling server. */

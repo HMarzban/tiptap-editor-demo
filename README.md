@@ -26,19 +26,24 @@ For this repo’s GitHub Pages base path, use **http://localhost:4173/tiptap-edi
 
 ## Stack
 
-Bun, React 19, Vite 8, Tailwind CSS 4, TipTap 3 / ProseMirror. Quality checks: ESLint, TypeScript (`tsc -b`), Vitest, GitHub Actions. Optional realtime editing uses Yjs, **`y-webrtc`** (peer-to-peer, public signaling), or optionally **`@hocuspocus/provider`** when you set a WebSocket URL; see below.
+Bun, React 19, Vite 8, Tailwind CSS 4, TipTap 3 / ProseMirror. Quality checks: ESLint, TypeScript (`tsc -b`), Vitest, GitHub Actions. Optional realtime editing uses Yjs, **`y-webrtc`** (WebRTC + optional signaling WebSocket), or **`@hocuspocus/provider`** when you set a doc-sync WebSocket URL; see below.
 
 ## Optional collaboration
 
-Multi-user editing (shared document, remote carets) works from a **static** build—no app server required.
+Multi-user editing (shared document, remote carets) can run from a **static** build.
 
-**Default path (good for GitHub Pages demos):** set **`VITE_COLLAB=true`** only. The app uses **WebRTC** via [y-webrtc](https://github.com/yjs/y-webrtc) with **public signaling** (defaults try **`wss://signaling.yjs.dev`** and **`wss://y-webrtc-eu.fly.dev`** in parallel; override with comma-separated **`VITE_COLLAB_SIGNALING`**). ICE uses public **Google STUN** only—there is **no TURN relay**, so **two different devices** on restrictive networks may never peer. **Two tabs in the same browser** usually sync quickly via **BroadcastChannel** without waiting on WebRTC. **Content is not durable**; the default room name is shared by everyone using the demo—treat it as a playground.
+**WebRTC path (`VITE_COLLAB=true`, no `VITE_COLLAB_WS_URL`):** uses [y-webrtc](https://github.com/yjs/y-webrtc). **ICE** uses public **Google STUN** (`stun.l.google.com`). **Signaling** is a **separate** WebSocket service (SDP/peer discovery); **Google does not provide y-webrtc signaling**, and old public relays often return connection errors, so this repo **defaults to no signaling URLs** to keep the console clean.
 
-**Optional WebSocket path:** set **`VITE_COLLAB_WS_URL`** to a Hocuspocus-compatible **`wss://`** endpoint; then WebRTC is **not** used.
+- **Same browser (multiple tabs / windows):** usually syncs via **BroadcastChannel** without any signaling server.
+- **Two phones / two laptops:** you need either **`VITE_COLLAB_SIGNALING`** pointing at your own **`wss://`** server running the y-webrtc signaling binary (`y-webrtc-signaling`, port **4444** by default over `ws://` locally), **or** use **`VITE_COLLAB_WS_URL`** with a Hocuspocus-compatible server instead of WebRTC.
 
-For both paths, **`VITE_COLLAB_ROOM`** selects the document / room (optional). Copy **`.env.example`** into **`.env.local`** or set the same **`VITE_*`** variables in CI for production builds.
+There is **no TURN relay** in this demo; strict NATs may still fail to peer even with signaling.
 
-The **GitHub Pages** workflow sets **`VITE_COLLAB=true`** at build time so the hosted demo can use WebRTC without extra secrets.
+**Optional doc-sync WebSocket:** set **`VITE_COLLAB_WS_URL`** to a Hocuspocus-compatible **`wss://`** endpoint; then WebRTC is **not** used.
+
+**`VITE_COLLAB_ROOM`** selects the room (optional). Copy **`.env.example`** into **`.env.local`** or set **`VITE_*`** in CI. The **GitHub Pages** workflow sets **`VITE_COLLAB=true`** so the hosted demo enables collab; it does **not** inject signaling URLs (same-browser demo stays quiet; cross-device needs your own `wss` or Hocuspocus).
+
+**Content is not durable**; the default room is shared—treat it as a playground.
 
 ## Scripts
 
