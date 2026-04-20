@@ -1,4 +1,3 @@
-import type { HocuspocusProvider } from "@hocuspocus/provider";
 import { useEditor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
 import * as Y from "yjs";
@@ -8,10 +7,11 @@ import {
   DEFAULT_EDITOR_PLACEHOLDER,
 } from "@/config/editorDefaults";
 import { buildEditorRootAttributes } from "../editorSurface";
+import type { CollabSyncProvider } from "@/lib/collabProvider";
 
 export type EditorCollaborationBinding = {
   ydoc: Y.Doc;
-  provider: HocuspocusProvider;
+  provider: CollabSyncProvider;
 };
 
 export interface UseEditorInstanceParams {

@@ -26,6 +26,9 @@ jobs:
 
       - run: bun install --frozen-lockfile
       - run: bun run build
+        env:
+          # Static demo: WebRTC + public signaling (no self-hosted sync server).
+          VITE_COLLAB: "true"
 
       - uses: actions/upload-pages-artifact@v3
         with:

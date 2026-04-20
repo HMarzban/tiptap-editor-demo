@@ -1,7 +1,6 @@
 import type { Extensions } from "@tiptap/core";
 import { Collaboration } from "@tiptap/extension-collaboration";
 import { CollaborationCaret } from "@tiptap/extension-collaboration-caret";
-import type { HocuspocusProvider } from "@hocuspocus/provider";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -23,13 +22,14 @@ import {
   renderCollaborationCaret,
   renderCollaborationSelection,
 } from "@/lib/collaborationCaretUi";
+import type { CollabSyncProvider } from "@/lib/collabProvider";
 import type * as Y from "yjs";
 
 export type CreateEditorExtensionsOptions = {
   placeholder: string;
   collaboration?: {
     ydoc: Y.Doc;
-    provider: HocuspocusProvider;
+    provider: CollabSyncProvider;
   };
 };
 
