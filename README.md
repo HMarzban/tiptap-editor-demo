@@ -1,80 +1,66 @@
 # TipTap editor demo
 
-Demo shell for a **React + TipTap v3** rich-text editor: toolbar (headings, lists, links, images, tasks), **hyperlink popovers** via `@docs.plus/extension-hyperlink`, indent support, and **light/dark** theming (`next-themes`). The sample document exercises formatting so you can evaluate behavior quickly.
+React + [TipTap](https://tiptap.dev/) v3 demo: toolbar (headings, lists, links, images, tasks), hyperlink popovers, indent, and light/dark theme. The bundled sample document is there to exercise formatting.
 
-**Live demo:** [hmarzban.github.io/tiptap-editor-demo](https://hmarzban.github.io/tiptap-editor-demo/)
-
-*Screenshots are full-page captures from `bun run build` + `bun run preview`. Update `docs/app-screenshot-light.png` and `docs/app-screenshot-dark.png` after major UI changes if you want the readme to stay in sync.*
-
-## Stack
-
-
-| Layer                     | Choice                                                             |
-| ------------------------- | ------------------------------------------------------------------ |
-| Runtime / package manager | [Bun](https://bun.sh) 1.x                                          |
-| UI                        | React 19, Vite 8, Tailwind CSS 4                                   |
-| Editor                    | TipTap 3, ProseMirror                                              |
-| Quality gate              | ESLint, TypeScript (`tsc -b`), Vitest, GitHub Actions              |
-| Optional realtime collab  | Yjs, TipTap Collaboration, WebSocket sync (`@hocuspocus/provider`) |
-
+**Live:** [hmarzban.github.io/tiptap-editor-demo](https://hmarzban.github.io/tiptap-editor-demo/)
 
 ## Quick start
+
+Requirements: [Bun](https://bun.sh) 1.x.
 
 ```bash
 bun install
 bun run dev
 ```
 
-Open the URL Vite prints (default `http://localhost:5173`). Production bundle:
+Open the URL Vite prints (default `http://localhost:5173`).
+
+Production build and local preview:
 
 ```bash
 bun run build
 bun run preview
 ```
 
-After a production build, open **http://localhost:4173/tiptap-editor-demo/** (the app uses the GitHub Pages base path in `vite build`).
+For this repo’s GitHub Pages base path, use **http://localhost:4173/tiptap-editor-demo/** after `bun run preview`.
 
-## Collaboration (WebSocket only)
+## Stack
 
-Optional **multi-cursor** editing (same idea as [docs-plus/editor](https://github.com/docs-plus/editor)): a **Yjs** document synced over **`VITE_COLLAB_WS_URL`**, TipTap **`Collaboration`** + **`CollaborationCaret`**, and awareness for **how many editors** are in the room.
+Bun, React 19, Vite 8, Tailwind CSS 4, TipTap 3 / ProseMirror. Quality checks: ESLint, TypeScript (`tsc -b`), Vitest, GitHub Actions. Optional realtime editing uses Yjs and a WebSocket client (`@hocuspocus/provider`); see below.
 
-This repo is **static** (e.g. GitHub Pages): it does **not** run a sync server. You host a **Hocuspocus-compatible** WebSocket endpoint yourself (or use a vendor), then set at build time:
+## Optional collaboration
 
-- **`VITE_COLLAB=true`**
-- **`VITE_COLLAB_WS_URL`** — e.g. `wss://your-service.example/path` (use `wss:` on HTTPS sites)
-- **`VITE_COLLAB_ROOM`** (optional) — document id / room name
+You can turn on **multi-user editing** (shared document, remote carets) by pointing the app at a **WebSocket URL** that speaks a Hocuspocus-compatible protocol. This project is a **static site**—it does not start a sync server for you.
 
-Keep **`VITE_COLLAB=false`** for production static deploys until you inject a real **`wss:`** URL via CI or host env (see `.env.example`).
+1. Copy `.env.example` to `.env.local` (or set the same variables in your deploy environment).
+2. Set **`VITE_COLLAB=true`** and **`VITE_COLLAB_WS_URL`** (use `wss://` when the page is served over HTTPS).
+3. Optionally set **`VITE_COLLAB_ROOM`** to split traffic into different documents.
+
+Leave collaboration off for the default single-user demo (`VITE_COLLAB` unset or `false`). If collab is on but **`VITE_COLLAB_WS_URL`** is missing, the UI explains what to configure.
 
 ## Scripts
 
-
-| Command              | Purpose                                               |
-| -------------------- | ----------------------------------------------------- |
-| `bun run dev`        | Development server                                    |
-| `bun run build`      | Typecheck + production build                          |
-| `bun run preview`    | Serve the `dist/` output                              |
-| `bun run lint`       | ESLint                                                |
-| `bun run typecheck`  | TypeScript only                                       |
-| `bun run test`       | Vitest (single run)                                   |
-| `bun run test:watch` | Vitest watch mode                                     |
-| `bun run ci`         | Lint, typecheck, tests, and build (matches CI intent) |
-
+| Command | Purpose |
+| --- | --- |
+| `bun run dev` | Dev server |
+| `bun run build` | Typecheck + production build |
+| `bun run preview` | Serve `dist/` |
+| `bun run lint` | ESLint |
+| `bun run typecheck` | TypeScript only |
+| `bun run test` | Vitest (single run) |
+| `bun run test:watch` | Vitest watch |
+| `bun run ci` | Lint, typecheck, test, build (same as CI) |
 
 ## Continuous integration
 
-On push and pull requests to `main` / `master`, GitHub Actions runs `bun install --frozen-lockfile`, then **lint → typecheck → test → build**.
+On push and on pull requests to `main` or `master`, CI runs `bun install --frozen-lockfile`, then lint, typecheck, test, and build.
 
-## Implementation notes
+## Where things live
 
-- **Editor root:** The ProseMirror surface uses a stable `tiptap` class so styles in `src/index.css` stay attached; root attributes are built in one place (`editorSurface`) so spellcheck toggles do not strip that class.
-- **Defaults:** Placeholders and sample HTML live under `src/config/` and `src/content/` so the app shell and editor agree on bootstrap content.
-- **Hyperlink UI:** Theme tokens `--hl-*` in `src/index.css` map the hyperlink package to your palette; package CSS is imported in `src/main.tsx`.
-- **Build:** Production builds emit **hidden** source maps for stack traces without advertising `.map` URLs to browsers.
-- **Errors:** `AppProviders` wraps the tree with an error boundary and theme provider.
-- **Collaboration:** When **`VITE_COLLAB=true`** and **`VITE_COLLAB_WS_URL`** is set, `Editor` waits for initial Yjs sync over WebSocket, then mounts `EditorWorkspace` with `Collaboration` + `CollaborationCaret`; StarterKit **`undoRedo`** is off (Yjs owns history). Empty rooms get a **best-effort** seed of the default HTML only while a **single** awareness client is present.
-
-Optional client configuration: copy `.env.example` to `.env.local` and use **`VITE_*`** names only (values are exposed to the browser).
+- **Editor chrome and extensions:** `src/components/Editor/` (extensions are composed in `createEditorExtensions.ts`).
+- **Defaults and sample HTML:** `src/config/`, `src/content/`.
+- **ProseMirror root class and attributes:** `editorSurface.ts` and `.tiptap` in `src/index.css`.
+- **Collaboration config:** `src/config/collaboration.ts`. Only variables prefixed with **`VITE_`** are exposed to the browser.
 
 ## License
 
