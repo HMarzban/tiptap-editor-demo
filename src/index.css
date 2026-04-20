@@ -274,40 +274,43 @@ ul[data-type="taskList"] {
   @apply mt-2;
 }
 
-.tiptap {
-  /* Give a remote user a caret */
-  .collaboration-cursor__caret {
-    border-left: 1px solid #0d0d0d;
-    border-right: 1px solid #0d0d0d;
-    margin-left: -1px;
-    margin-right: -1px;
-    pointer-events: none;
-    position: relative;
-    word-break: normal;
+/* TipTap CollaborationCaret uses `collaboration-carets__*` (not `collaboration-cursor__*`). */
+.tiptap .collaboration-carets__caret {
+  border: none;
+  border-left: 2px solid;
+  box-sizing: content-box;
+  display: inline-block;
+  height: 1.15em;
+  margin-left: -1px;
+  pointer-events: none;
+  position: relative;
+  vertical-align: text-bottom;
+  width: 0;
+  word-break: normal;
+}
 
-    .dark & {
-      border-left: 1px solid #f5f5f5;
-      border-right: 1px solid #f5f5f5;
-    }
-  }
+.tiptap .collaboration-carets__label {
+  border-radius: 0.25rem 0.25rem 0.25rem 0;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  left: 0;
+  line-height: 1.2;
+  max-width: 11rem;
+  overflow: hidden;
+  padding: 0.125rem 0.375rem;
+  pointer-events: none;
+  position: absolute;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 35%);
+  top: -1.3rem;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 2;
+}
 
-  /* Render the username above the caret */
-  .collaboration-cursor__label {
-    border-radius: 3px 3px 3px 0;
-    color: #0d0d0d;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 600;
-    left: -1px;
-    line-height: normal;
-    padding: 0.1rem 0.3rem;
-    position: absolute;
-    top: -1.4em;
-    user-select: none;
-    white-space: nowrap;
-
-    .dark & {
-      color: #f5f5f5;
-    }
-  }
+.tiptap .collaboration-carets__selection {
+  border-radius: 0.125rem;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }

@@ -4,19 +4,18 @@ Demo shell for a **React + TipTap v3** rich-text editor: toolbar (headings, list
 
 **Live demo:** [hmarzban.github.io/tiptap-editor-demo](https://hmarzban.github.io/tiptap-editor-demo/)
 
-
-
 *Screenshots are full-page captures from `bun run build` + `bun run preview`. Update `docs/app-screenshot-light.png` and `docs/app-screenshot-dark.png` after major UI changes if you want the readme to stay in sync.*
 
 ## Stack
 
 
-| Layer                     | Choice                                                |
-| ------------------------- | ----------------------------------------------------- |
-| Runtime / package manager | [Bun](https://bun.sh) 1.x                             |
-| UI                        | React 19, Vite 8, Tailwind CSS 4                      |
-| Editor                    | TipTap 3, ProseMirror                                 |
-| Quality gate              | ESLint, TypeScript (`tsc -b`), Vitest, GitHub Actions |
+| Layer                     | Choice                                                             |
+| ------------------------- | ------------------------------------------------------------------ |
+| Runtime / package manager | [Bun](https://bun.sh) 1.x                                          |
+| UI                        | React 19, Vite 8, Tailwind CSS 4                                   |
+| Editor                    | TipTap 3, ProseMirror                                              |
+| Quality gate              | ESLint, TypeScript (`tsc -b`), Vitest, GitHub Actions              |
+| Optional realtime collab  | Yjs, TipTap Collaboration, WebSocket sync (`@hocuspocus/provider`) |
 
 
 ## Quick start
@@ -33,7 +32,19 @@ bun run build
 bun run preview
 ```
 
-After a production build, open **`http://localhost:4173/tiptap-editor-demo/`** (the app uses the GitHub Pages base path in `vite build`).
+After a production build, open **http://localhost:4173/tiptap-editor-demo/** (the app uses the GitHub Pages base path in `vite build`).
+
+## Collaboration (WebSocket only)
+
+Optional **multi-cursor** editing (same idea as [docs-plus/editor](https://github.com/docs-plus/editor)): a **Yjs** document synced over **`VITE_COLLAB_WS_URL`**, TipTap **`Collaboration`** + **`CollaborationCaret`**, and awareness for **how many editors** are in the room.
+
+This repo is **static** (e.g. GitHub Pages): it does **not** run a sync server. You host a **Hocuspocus-compatible** WebSocket endpoint yourself (or use a vendor), then set at build time:
+
+- **`VITE_COLLAB=true`**
+- **`VITE_COLLAB_WS_URL`** — e.g. `wss://your-service.example/path` (use `wss:` on HTTPS sites)
+- **`VITE_COLLAB_ROOM`** (optional) — document id / room name
+
+Keep **`VITE_COLLAB=false`** for production static deploys until you inject a real **`wss:`** URL via CI or host env (see `.env.example`).
 
 ## Scripts
 
@@ -61,8 +72,9 @@ On push and pull requests to `main` / `master`, GitHub Actions runs `bun install
 - **Hyperlink UI:** Theme tokens `--hl-*` in `src/index.css` map the hyperlink package to your palette; package CSS is imported in `src/main.tsx`.
 - **Build:** Production builds emit **hidden** source maps for stack traces without advertising `.map` URLs to browsers.
 - **Errors:** `AppProviders` wraps the tree with an error boundary and theme provider.
+- **Collaboration:** When **`VITE_COLLAB=true`** and **`VITE_COLLAB_WS_URL`** is set, `Editor` waits for initial Yjs sync over WebSocket, then mounts `EditorWorkspace` with `Collaboration` + `CollaborationCaret`; StarterKit **`undoRedo`** is off (Yjs owns history). Empty rooms get a **best-effort** seed of the default HTML only while a **single** awareness client is present.
 
-Optional client configuration: copy `.env.example` to `.env.local` and use `**VITE_*`** names only (values are exposed to the browser).
+Optional client configuration: copy `.env.example` to `.env.local` and use **`VITE_*`** names only (values are exposed to the browser).
 
 ## License
 

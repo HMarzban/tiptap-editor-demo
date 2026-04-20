@@ -16,6 +16,8 @@ export interface EditorFooterProps {
   isOnline: boolean;
   spellCheck: boolean;
   setSpellCheck: (value: boolean) => void;
+  /** Yjs awareness size when collaboration is enabled. */
+  collaboratorCount?: number;
 }
 
 // Base item

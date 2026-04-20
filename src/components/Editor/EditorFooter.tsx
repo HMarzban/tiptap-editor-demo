@@ -1,4 +1,4 @@
-import { Clock, CircleDot, SpellCheck } from "lucide-react";
+import { Clock, CircleDot, SpellCheck, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { EditorFooterProps } from "./hooks/types";
@@ -10,6 +10,7 @@ export function EditorFooter({
   isOnline,
   spellCheck,
   setSpellCheck,
+  collaboratorCount,
 }: EditorFooterProps) {
   if (!editor) return null;
 
@@ -35,6 +36,16 @@ export function EditorFooter({
           />
           <span>{isOnline ? "Online" : "Offline"}</span>
         </div>
+
+        {collaboratorCount !== undefined && (
+          <div className="flex items-center gap-1 text-xs tabular-nums">
+            <Users className="w-3 h-3" aria-hidden />
+            <span>
+              {collaboratorCount}{" "}
+              {collaboratorCount === 1 ? "editor" : "editors"}
+            </span>
+          </div>
+        )}
 
         <div className="flex items-center gap-2">
           <Button

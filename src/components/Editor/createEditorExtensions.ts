@@ -1,4 +1,7 @@
 import type { Extensions } from "@tiptap/core";
+import { Collaboration } from "@tiptap/extension-collaboration";
+import { CollaborationCaret } from "@tiptap/extension-collaboration-caret";
+import type { HocuspocusProvider } from "@hocuspocus/provider";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -15,24 +18,52 @@ import {
 } from "@docs.plus/extension-hyperlink";
 import { Indent } from "@docs.plus/extension-indent";
 import { FontSize } from "./extensions/fontSizeExtension";
+import { getCollabUserIdentity } from "@/lib/collabUser";
+import {
+  renderCollaborationCaret,
+  renderCollaborationSelection,
+} from "@/lib/collaborationCaretUi";
+import type * as Y from "yjs";
 
 export type CreateEditorExtensionsOptions = {
   placeholder: string;
+  collaboration?: {
+    ydoc: Y.Doc;
+    provider: HocuspocusProvider;
+  };
 };
 
 /**
  * TipTap extension composition root. Pairs with:
  * - DOM class: `editorSurface.ts` + `.tiptap` in `index.css`
  * - Footer metrics: `CharacterCount` storage (see `editorMetrics.ts`)
+ * - Collaboration: pass `ydoc` + WebSocket sync `provider` (disables StarterKit undo)
  */
 export function createEditorExtensions({
   placeholder,
+  collaboration,
 }: CreateEditorExtensionsOptions): Extensions {
+  const starterKit = StarterKit.configure({
+    heading: { levels: [1, 2, 3] },
+    link: false,
+    ...(collaboration ? { undoRedo: false } : {}),
+  });
+
+  const collaborationExtensions: Extensions = collaboration
+    ? [
+        Collaboration.configure({ document: collaboration.ydoc }),
+        CollaborationCaret.configure({
+          provider: collaboration.provider,
+          user: getCollabUserIdentity(),
+          render: renderCollaborationCaret,
+          selectionRender: renderCollaborationSelection,
+        }),
+      ]
+    : [];
+
   return [
-    StarterKit.configure({
-      heading: { levels: [1, 2, 3] },
-      link: false,
-    }),
+    starterKit,
+    ...collaborationExtensions,
     Underline,
     Placeholder.configure({ placeholder }),
     CharacterCount,
