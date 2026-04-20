@@ -12,8 +12,8 @@ type CharacterCountStorage = {
 };
 
 /**
- * Aggregates footer metrics. Prefers `@tiptap/extension-character-count` when registered;
- * falls back to plain text length for characters if storage is missing.
+ * Footer metrics: use CharacterCount when sane; if the doc has text but counts are zero,
+ * derive from `getText()` (covers stale React / rare collab mismatches).
  */
 export function getEditorDocumentStats(editor: Editor): EditorDocumentStats {
   const text = editor.getText();

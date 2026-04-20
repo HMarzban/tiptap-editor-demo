@@ -2,8 +2,8 @@
  * Opt-in realtime editing: set `VITE_COLLAB=true`.
  *
  * - With **`VITE_COLLAB_WS_URL`**: Hocuspocus-compatible WebSocket sync (self-hosted).
- * - Without it: **WebRTC** (y-webrtc) + public signaling — fine for a static demo; data can be
- *   ephemeral if peers never connect.
+ * - Without it: **WebRTC** (y-webrtc); default **no** signaling URLs (same-browser sync only unless
+ *   `VITE_COLLAB_SIGNALING` is set). Fine for a static demo; cross-device needs your `wss` or WS URL.
  */
 
 const DEFAULT_ROOM = "tiptap-demo";

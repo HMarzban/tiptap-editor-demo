@@ -23,7 +23,7 @@ export type CollaborationSession = {
 
 /**
  * One Y.Doc + sync provider when `enabled` is true.
- * Uses Hocuspocus WebSocket if `VITE_COLLAB_WS_URL` is set; otherwise y-webrtc (public signaling).
+ * Uses Hocuspocus WebSocket if `VITE_COLLAB_WS_URL` is set; otherwise y-webrtc (optional `VITE_COLLAB_SIGNALING`).
  */
 export function useCollaborationSession(
   enabled: boolean
