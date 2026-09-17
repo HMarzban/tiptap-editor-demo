@@ -5,8 +5,8 @@ import { defineConfig } from "vitest/config";
 
 // https://vite.dev/config/
 // Production builds use repo base path for GitHub Pages project sites.
-export default defineConfig(({ command }) => ({
-  base: command === "build" ? "/tiptap-editor-demo/" : "/",
+export default defineConfig(({ command, isPreview }) => ({
+  base: command === "build" || isPreview ? "/tiptap-editor-demo/" : "/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
