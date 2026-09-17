@@ -4,6 +4,19 @@ React + [TipTap](https://tiptap.dev/) v3 demo: toolbar (headings, lists, links, 
 
 **Live:** [hmarzban.github.io/tiptap-editor-demo](https://hmarzban.github.io/tiptap-editor-demo/)
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/app-screenshot-dark.png" />
+  <img src="docs/app-screenshot-light.png" alt="TipTap demo with its formatting toolbar and sample document" />
+</picture>
+
+## Try it in one minute
+
+1. Open the [live demo](https://hmarzban.github.io/tiptap-editor-demo/) in two tabs in the same browser profile.
+2. Type in one tab and watch the change appear in the other. Keep both tabs open; the room has no durable document storage.
+3. Select text to add or edit a link, try a task list, then switch the light/dark theme.
+
+The hosted demo syncs same-origin tabs through BroadcastChannel. Different devices need your own signaling or Hocuspocus server; opening the public URL on two devices alone is not enough. For the same local demo, set `VITE_COLLAB=true` in `.env.local` before starting Vite.
+
 ## Quick start
 
 Requirements: [Bun](https://bun.sh) 1.x.
@@ -44,6 +57,12 @@ There is **no TURN relay** in this demo; strict NATs may still fail to peer even
 **`VITE_COLLAB_ROOM`** selects the room (optional). Copy **`.env.example`** into **`.env.local`** or set **`VITE_*`** in CI. The **GitHub Pages** workflow sets **`VITE_COLLAB=true`** so the hosted demo enables collab; it does **not** inject signaling URLs (same-browser demo stays quiet; cross-device needs your own `wss` or Hocuspocus).
 
 **Content is not durable**; the default room is shared—treat it as a playground.
+
+## Engineering decisions and scope
+
+The editor extension list is composed in `createEditorExtensions.ts`; UI controls work through TipTap commands while ProseMirror owns document changes. Yjs handles shared state when collaboration is enabled. Provider setup is isolated from the toolbar so the same editor can use WebRTC or a Hocuspocus-compatible WebSocket service.
+
+This repository preserves a tested integration of the dependency versions in `bun.lock`, including its existing docs.plus extensions. It is a focused playground, not a compatibility matrix for every extension release. It has no document database, accounts, authorization layer, or TURN service. Theme preferences can persist locally; document edits do not have a persistence adapter. After every peer closes, a fresh room starts with the sample content.
 
 ## Scripts
 
